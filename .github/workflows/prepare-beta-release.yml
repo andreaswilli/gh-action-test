@@ -42,7 +42,3 @@ jobs:
 
       - name: Push commit and tag
         run: git push --follow-tags
-
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
