@@ -23,3 +23,6 @@ jobs:
 
       - name: Bump version to next prepatch
         run: npm run bump-prepatch
+
+      - name: Push commit and tag
+        run: git push --follow-tags
