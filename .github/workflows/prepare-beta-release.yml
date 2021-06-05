@@ -5,8 +5,8 @@ on:
     types: [labeled]
 
 jobs:
-  checkLabels:
-    name: Check labels
+  prepareBetaRelease:
+    name: Prepare beta release
     runs-on: ubuntu-latest
     steps:
       - name: Fail on irrelevant tag
@@ -15,11 +15,6 @@ jobs:
                 github.event.label.name != 'release major'}}
         run: exit 1
 
-  bumpPrerelease:
-    name: Bump prerelease
-    needs: checkLabels
-    runs-on: ubuntu-latest
-    steps:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -47,3 +42,7 @@ jobs:
 
       - name: Push commit and tag
         run: git push --follow-tags
+
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
