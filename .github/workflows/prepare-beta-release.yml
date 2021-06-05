@@ -17,5 +17,9 @@ jobs:
         with:
           node-version: '12.x'
 
+      - uses: oleksiyrudenko/gha-git-credentials@v2-latest
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+
       - name: Bump version to next prepatch
         run: npm run bump-prepatch
