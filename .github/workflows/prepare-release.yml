@@ -50,5 +50,5 @@ jobs:
 
       - name: Merge 'main' into 'beta'
         run: |
-          git merge main
+          git merge origin/main
           git push
