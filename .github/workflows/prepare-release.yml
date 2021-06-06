@@ -43,3 +43,9 @@ jobs:
 
       - name: Push commit and tag
         run: git push --follow-tags
+
+      - name: Merge 'main' into 'beta'
+        run: |
+          git checkout beta
+          git merge main
+          git push
