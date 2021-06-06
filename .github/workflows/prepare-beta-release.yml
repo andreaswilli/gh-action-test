@@ -2,21 +2,16 @@ name: Prepare Beta Release
 
 on:
   pull_request:
-    types: [labeled]
+    types: [closed]
     branches:
       - beta
 
 jobs:
   prepareBetaRelease:
     name: Prepare beta release
+    if: ${{ github.event.pull_request.merged }}
     runs-on: ubuntu-latest
     steps:
-      - name: Fail on irrelevant tag
-        if: "${{ github.event.label.name != 'release: patch' &&
-                github.event.label.name != 'release: minor' &&
-                github.event.label.name != 'release: major'}}"
-        run: exit 1
-
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -39,17 +34,17 @@ jobs:
         run: npm run bump-prerelease
 
       - name: Bump version to next prepatch
-        if: "${{ github.event.label.name == 'release: patch' &&
+        if: "${{ contains(github.event.pull_request.labels.*.name, 'release: patch') &&
                  !contains(steps.extract_version.outputs.version, '-') }}"
         run: npm run bump-prepatch
 
       - name: Bump version to next preminor
-        if: "${{ github.event.label.name == 'release: minor' &&
+        if: "${{ contains(github.event.pull_request.labels.*.name, 'release: minor') &&
                  !contains(steps.extract_version.outputs.version, '-') }}"
         run: npm run bump-preminor
 
       - name: Bump version to next premajor
-        if: "${{ github.event.label.name == 'release: major' &&
+        if: "${{ contains(github.event.pull_request.labels.*.name, 'release: major') &&
                  !contains(steps.extract_version.outputs.version, '-') }}"
         run: npm run bump-premajor
 
