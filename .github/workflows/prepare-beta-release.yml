@@ -11,8 +11,8 @@ jobs:
     steps:
       - name: Fail on irrelevant tag
         if: "${{ github.event.label.name != 'release: patch' &&
-                github.event.label.name != 'release minor' &&
-                github.event.label.name != 'release major'}}"
+                github.event.label.name != 'release: minor' &&
+                github.event.label.name != 'release: major'}}"
         run: exit 1
 
       - uses: actions/checkout@v2
@@ -33,11 +33,11 @@ jobs:
         run: npm run bump-prepatch
 
       - name: Bump version to next preminor
-        if: ${{ github.event.label.name == 'release minor' }}
+        if: "${{ github.event.label.name == 'release: minor' }}"
         run: npm run bump-preminor
 
       - name: Bump version to next premajor
-        if: ${{ github.event.label.name == 'release major' }}
+        if: "${{ github.event.label.name == 'release: major' }}"
         run: npm run bump-premajor
 
       - name: Push commit and tag
