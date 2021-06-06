@@ -30,9 +30,16 @@ jobs:
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
 
-      - name: Bump version to next patch/minor/major
-        # running bump-major, bump-minor or bump-patch has the same effect on
-        # a prerelease -> no need to check for type of release
+      - name: Bump version to next patch
+        if: "${{ github.event.label.name == 'release: patch' }}"
+        run: npm run bump-patch
+
+      - name: Bump version to next minor
+        if: "${{ github.event.label.name == 'release: minor' }}"
+        run: npm run bump-minor
+
+      - name: Bump version to next major
+        if: "${{ github.event.label.name == 'release: major' }}"
         run: npm run bump-major
 
       - name: Push commit and tag
