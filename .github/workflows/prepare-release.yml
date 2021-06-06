@@ -44,11 +44,11 @@ jobs:
       - name: Push commit and tag
         run: git push --follow-tags
 
+      - uses: actions/checkout@v2
+        with:
+          ref: beta
 
       - name: Merge main -> beta
-        uses: devmasx/merge-branch@v1.3.1
-        with:
-          type: now
-          from_branch: main
-          target_branch: beta
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git merge origin/main
+          git push
