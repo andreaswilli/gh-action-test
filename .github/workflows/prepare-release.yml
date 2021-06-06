@@ -1,0 +1,39 @@
+name: Prepare Release
+
+on:
+  pull_request:
+    types: [labeled]
+    branches:
+      - main
+
+jobs:
+  prepareRelease:
+    name: Prepare release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail on irrelevant tag
+        if: "${{ github.event.label.name != 'release: patch' &&
+                github.event.label.name != 'release: minor' &&
+                github.event.label.name != 'release: major'}}"
+        run: exit 1
+
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Use Node.js ${{ matrix.node-verison }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - uses: oleksiyrudenko/gha-git-credentials@v2-latest
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Bump version to next patch/minor/major
+        # running bump-major, bump-minor or bump-patch has the same effect on
+        # a prerelease -> no need to check for type of release
+        run: npm run bump-major
+
+      - name: Push commit and tag
+        run: git push --follow-tags
