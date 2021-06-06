@@ -44,10 +44,12 @@ jobs:
       - name: Push commit and tag
         run: git push --follow-tags
 
-      - name: Merge main -> beta
-        uses: MaximeHeckel/github-action-merge-fast-forward@v1.1.0
+      - uses: actions/checkout@v2
         with:
-          branchtomerge: main
-          branch: beta
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ref: beta
+          fetch-depth: 0
+
+      - name: Merge main -> beta
+        run: |
+          git merge origin/merge
+          git push
