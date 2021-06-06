@@ -43,5 +43,3 @@ jobs:
 
       - name: Push commit and tag
         run: git push --follow-tags
-
-# another comment
