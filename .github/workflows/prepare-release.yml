@@ -44,8 +44,11 @@ jobs:
       - name: Push commit and tag
         run: git push --follow-tags
 
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
       - name: Merge 'main' into 'beta'
         run: |
-          git checkout -b beta --track origin/beta
           git merge main
           git push
