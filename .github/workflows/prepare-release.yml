@@ -2,24 +2,23 @@ name: Prepare Release
 
 on:
   pull_request:
-    types: [labeled]
+    types: [closed]
     branches:
       - main
 
 jobs:
   prepareRelease:
     name: Prepare release
+    if: "${{ github.event.pull_request.merged && (
+          contains(github.event.pull_request.labels.*.name, 'release: patch') ||
+          contains(github.event.pull_request.labels.*.name, 'release: minor') ||
+          contains(github.event.pull_request.labels.*.name, 'release: major')
+        ) }}"
     runs-on: ubuntu-latest
     steps:
-      - name: Fail on irrelevant tag
-        if: "${{ github.event.label.name != 'release: patch' &&
-                github.event.label.name != 'release: minor' &&
-                github.event.label.name != 'release: major'}}"
-        run: exit 1
-
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.pull_request.base.ref }}
 
       - name: Use Node.js ${{ matrix.node-verison }}
         uses: actions/setup-node@v1
@@ -31,15 +30,15 @@ jobs:
           token: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: Bump version to next patch
-        if: "${{ github.event.label.name == 'release: patch' }}"
+        if: "${{ contains(github.event.pull_request.labels.*.name, 'release: patch') }}"
         run: npm run bump-patch
 
       - name: Bump version to next minor
-        if: "${{ github.event.label.name == 'release: minor' }}"
+        if: "${{ contains(github.event.pull_request.labels.*.name, 'release: minor') }}"
         run: npm run bump-minor
 
       - name: Bump version to next major
-        if: "${{ github.event.label.name == 'release: major' }}"
+        if: "${{ contains(github.event.pull_request.labels.*.name, 'release: major') }}"
         run: npm run bump-major
 
       - name: Push commit and tag
