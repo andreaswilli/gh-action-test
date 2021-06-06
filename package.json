@@ -1,6 +1,6 @@
 {
   "name": "gh-action-test",
-  "version": "3.1.1-beta.0",
+  "version": "3.1.1",
   "description": "",
   "main": "index.js",
   "scripts": {
