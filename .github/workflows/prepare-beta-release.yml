@@ -28,16 +28,27 @@ jobs:
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
 
+      - name: Extract version
+        id: extract_version
+        uses: Saionaro/extract-package-version@v1.0.6
+
+      - name: Bump to next prerelease
+        if: contains(steps.extract_version.outputs.version, '-')
+        run: npm run bump-prerelease
+
       - name: Bump version to next prepatch
-        if: "${{ github.event.label.name == 'release: patch' }}"
+        if: "${{ github.event.label.name == 'release: patch' &&
+                 !contains(steps.extract_version.outputs.version, '-') }}"
         run: npm run bump-prepatch
 
       - name: Bump version to next preminor
-        if: "${{ github.event.label.name == 'release: minor' }}"
+        if: "${{ github.event.label.name == 'release: minor' &&
+                 !contains(steps.extract_version.outputs.version, '-') }}"
         run: npm run bump-preminor
 
       - name: Bump version to next premajor
-        if: "${{ github.event.label.name == 'release: major' }}"
+        if: "${{ github.event.label.name == 'release: major' &&
+                 !contains(steps.extract_version.outputs.version, '-') }}"
         run: npm run bump-premajor
 
       - name: Push commit and tag
