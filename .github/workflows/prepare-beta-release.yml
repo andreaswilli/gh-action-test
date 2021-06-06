@@ -1,0 +1,55 @@
+name: Prepare Beta Release
+
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  prepareBetaRelease:
+    name: Prepare beta release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail on irrelevant tag
+        if: "${{ github.event.label.name != 'release: patch' &&
+                github.event.label.name != 'release: minor' &&
+                github.event.label.name != 'release: major'}}"
+        run: exit 1
+
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Use Node.js ${{ matrix.node-verison }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - uses: oleksiyrudenko/gha-git-credentials@v2-latest
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Extract version
+        id: extract_version
+        uses: Saionaro/extract-package-version@v1.0.6
+
+      - name: Bump to next prerelease
+        if: contains(steps.extract_version.outputs.version, '-')
+        run: npm run bump-prerelease
+
+      - name: Bump version to next prepatch
+        if: "${{ github.event.label.name == 'release: patch' &&
+                 !contains(steps.extract_version.outputs.version, '-') }}"
+        run: npm run bump-prepatch
+
+      - name: Bump version to next preminor
+        if: "${{ github.event.label.name == 'release: minor' &&
+                 !contains(steps.extract_version.outputs.version, '-') }}"
+        run: npm run bump-preminor
+
+      - name: Bump version to next premajor
+        if: "${{ github.event.label.name == 'release: major' &&
+                 !contains(steps.extract_version.outputs.version, '-') }}"
+        run: npm run bump-premajor
+
+      - name: Push commit and tag
+        run: git push --follow-tags
