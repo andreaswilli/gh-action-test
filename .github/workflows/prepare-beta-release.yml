@@ -3,6 +3,8 @@ name: Prepare Beta Release
 on:
   pull_request:
     types: [labeled]
+    branches:
+      - beta
 
 jobs:
   prepareBetaRelease:
