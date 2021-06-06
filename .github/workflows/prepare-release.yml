@@ -46,6 +46,6 @@ jobs:
 
       - name: Merge 'main' into 'beta'
         run: |
-          git checkout beta
+          git checkout -b beta --track origin/beta
           git merge main
           git push
