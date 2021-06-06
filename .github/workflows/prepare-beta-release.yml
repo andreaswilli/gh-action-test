@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Fail on irrelevant tag
-        if: ${{ github.event.label.name != 'release&#58; patch' &&
+        if: ${{ github.event.label.name != 'release':' patch' &&
                 github.event.label.name != 'release minor' &&
                 github.event.label.name != 'release major'}}
         run: exit 1
@@ -29,7 +29,7 @@ jobs:
           token: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: Bump version to next prepatch
-        if: ${{ github.event.label.name == 'release&#58; patch' }}
+        if: ${{ github.event.label.name == 'release':' patch' }}
         run: npm run bump-prepatch
 
       - name: Bump version to next preminor
