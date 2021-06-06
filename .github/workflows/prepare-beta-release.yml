@@ -9,7 +9,11 @@ on:
 jobs:
   prepareBetaRelease:
     name: Prepare beta release
-    if: ${{ github.event.pull_request.merged }}
+    if: "${{ github.event.pull_request.merged && (
+          contains(github.event.pull_request.labels.*.name, 'release: patch') ||
+          contains(github.event.pull_request.labels.*.name, 'release: minor') ||
+          contains(github.event.pull_request.labels.*.name, 'release: major')
+        ) }}"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
