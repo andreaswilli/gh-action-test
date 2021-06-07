@@ -57,7 +57,7 @@ jobs:
 
       - uses: olegtarasov/get-tag@v2.1
 
-      - run: "echo tag name: ${{ $GIT_TAG_NAME }}"
+      - run: "echo tag name: $GIT_TAG_NAME"
 
       # - name: Create Release Draft
       #   uses: softprops/action-gh-release@v1
