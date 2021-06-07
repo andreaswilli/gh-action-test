@@ -55,6 +55,10 @@ jobs:
       - name: Push commit and tag
         run: git push --follow-tags
 
+      - uses: actions/checkout@v2
+        with:
+          ref: beta
+
       - uses: olegtarasov/get-tag@v2.1
 
       - run: "echo tag name: $GIT_TAG_NAME"
