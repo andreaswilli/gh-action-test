@@ -60,12 +60,10 @@ jobs:
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
       - name: Create Release Draft
-        uses: ncipollo/release-action@v1
+        uses: softprops/action-gh-release@v1
         with:
-          tag: ${{ steps.previoustag.outputs.tag }}
+          tag_name: ${{ steps.previoustag.outputs.tag }}
           draft: true
           prerelease: true
-          body: |
-            - some changes
-            - some more changes 
-          token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
