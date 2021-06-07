@@ -55,8 +55,19 @@ jobs:
       - name: Push commit and tag
         run: git push --follow-tags
 
-      - name: Get Previous tag
+      - name: Get Latest Tag
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
-      - run: echo ${{ steps.previoustag.outputs.tag }}
+      - name: Create Release Draft
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.previoustag.outputs.tag }}
+          body: "
+            - some changes
+            - some more changes
+          "
+          draft: true
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
