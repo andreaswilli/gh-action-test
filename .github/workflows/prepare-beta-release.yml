@@ -59,5 +59,4 @@ jobs:
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
-      - uses: "WyriHaximus/github-action-next-semvers@v1"
-        run: echo ${{ steps.previoustag.outputs.tag }}
+      - run: echo ${{ steps.previoustag.outputs.tag }}
