@@ -54,19 +54,3 @@ jobs:
 
       - name: Push commit and tag
         run: git push --follow-tags
-
-      - uses: olegtarasov/get-tag@v2.1
-
-      - run: "echo tag name: ${{ $GIT_TAG_NAME }}"
-
-      # - name: Create Release Draft
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     body: "
-      #       - some changes
-      #       - some more changes
-      #     "
-      #     draft: true
-      #     prerelease: true
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
