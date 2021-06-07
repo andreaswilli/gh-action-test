@@ -11,8 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: echo prerelease=${{ GITHUB_REF }}
+      - run: echo prerelease=${{ github.ref }}
         if: github.event.release.prerelease
         
-      - run: echo release=${{ GITHUB_REF }}
+      - run: echo release=${{ github.ref }}
         if: "!github.event.release.prerelease"
