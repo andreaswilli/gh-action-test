@@ -1,0 +1,18 @@
+name: Publish Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publishRelease:
+    name: Publish release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: echo prerelease=${{ github.ref }}
+        if: github.event.release.prerelease
+        
+      - run: echo release=${{ github.ref }}
+        if: "!github.event.release.prerelease"
